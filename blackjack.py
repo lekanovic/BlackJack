@@ -4,10 +4,13 @@ from cards import Deck
 from player import Robot
 from player import House
 from player import Smart
+from statistic import Stats
+
 import time
 
 class Blackjack:
 	def __init__(self,h,n=5):
+		self.Stat = Stats()
 		self.number_of_decks = n
 		self.house = h
 		self.players = []
@@ -59,7 +62,6 @@ class Blackjack:
 			while a.more_cards():
 				c = self.pop_card()
 				a.take_card(c)
-				#print "%s mer kort, hand %s" % (a.name,a.sum_hand())
 
 		#House turn to pick cards
 		while self.house.more_cards():
@@ -67,27 +69,11 @@ class Blackjack:
 
 		sum = self.house.sum_hand()
 
-		self.print_results(sum)
+		#Track all stats
+		self.Stat.collect_data(self.house,self.players)
 
 		#Round is over throw the cards holding
 		self.throw_all_hands()
-
-	def print_results(self,s):
-		if s > 21:
-			print "All player won house is TJOCK!"
-			for a in self.players:
-				if a.sum_hand() < 22:
-					print "%s won!!. hand %d" % (a.name,a.sum_hand())
-					a.print_hand()
-			return
-
-		print "House %s has %d in his hand" %(self.house.name,s)
-		for a in self.players:
-			if a.sum_hand() < s and s < 22 or a.sum_hand() > 21:
-				print "%s lost!!. hand %d" % (a.name,a.sum_hand())
-			else:
-				print "%s won!!. hand %d" % (a.name,a.sum_hand())
-			a.print_hand()
 
 def main():
 	game = Blackjack(House('Jimmy'))
@@ -100,7 +86,9 @@ def main():
 	game.add_player(p2)
 	game.add_player(p3)
 	game.add_player(p4)
-	game.play()
+
+	for i in range(0,10):
+		game.play()
 
 
 if __name__ == "__main__":

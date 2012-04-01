@@ -43,19 +43,34 @@ class Blackjack:
 
 		return self.deck.pop_card()
 
-	def play_round(self):
-		#First round players gets their cards
+	def start_deal(self):
+		#Players gets their first cards
 		for a in self.players:
 			c = self.pop_card()
 			a.take_card(c)
 
-		#House gets the last card
+		#House gets it's first card
 		c = self.pop_card()
 		self.house.take_card(c)
 
 		#Let players know what card house got
 		for a in self.players:
 			a.add_house_card(c)
+
+		#Players gets their second cards
+		for a in self.players:
+			c = self.pop_card()
+			a.take_card(c)
+
+		#House gets it's second card but is not
+		#showed to players.
+		c = self.pop_card()
+		self.house.take_card(c)
+
+
+	def play_round(self):
+
+		self.start_deal()
 
 		#Now players can decide if they should
 		#have more cards or stop
@@ -67,8 +82,6 @@ class Blackjack:
 		#House turn to pick cards
 		while self.house.more_cards():
 			self.house.take_card( self.pop_card())
-
-		sum = self.house.sum_hand()
 
 		#Track all stats
 		self.Stat.collect_data(self.house,self.players)

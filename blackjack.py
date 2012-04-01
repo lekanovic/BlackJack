@@ -33,6 +33,7 @@ class Blackjack:
 		#time.sleep(5)
 		self.play_round()
 		print "cards left %d" %	(self.deck.cards_left())
+		print "*** Game End ***"
 
 	def pop_card(self):
 		#All cards are used create an new deck of cards
@@ -75,21 +76,26 @@ class Blackjack:
 		#Round is over throw the cards holding
 		self.throw_all_hands()
 
+	def show_results(self):
+		print "not implemented yet"
+
 def main():
+	cash = 100
 	game = Blackjack(House('Jimmy'))
-	p1 = Robot("Calle")
-	p2 = Robot("Nisse")
-	p3 = Robot("Olle")
-	p4 = Smart("Albert")
+	p1 = Robot("Calle",cash)
+	p2 = Robot("Nisse",cash)
+	p3 = Robot("Olle",cash)
+	p4 = Smart("Albert",cash)
 
 	game.add_player(p1)
 	game.add_player(p2)
 	game.add_player(p3)
 	game.add_player(p4)
 
-	for i in range(0,10):
+	for i in range(0,1):
 		game.play()
 
+	game.show_results()
 
 if __name__ == "__main__":
 	    main()

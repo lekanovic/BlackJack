@@ -1,6 +1,20 @@
 #!/usr/bin/python
 
 
+class Gambler(object):
+	def __init__(self,m):
+		self.money = m
+		self.bet = 0
+
+	def place_bet(self,n):
+		self.bet = n
+
+	def won(self,m):
+		self.money += m
+
+	def lost(self,m):
+		self.money -= m
+
 class Player(object):
 	def __init__(self,n):
 		self.name = n
@@ -17,6 +31,7 @@ class Player(object):
 
 	def throw_hand(self):
 		self.hand = []
+		self.place_bet = 0
 
 	def add_house_card(self,c):
 		self.house_card = c
@@ -30,18 +45,27 @@ class Player(object):
 	def print_hand(self):
 		v=[]
 		for c in self.hand:
-			v.append(c.value)
-		print v
+			v.append(str(c.value))
+		print ','.join(v)
 
-class Human(Player):
-	def __init__(self,n):
-		Player.__init__(self,n)
+	def get_hand(self):
+		v=[]
+		for c in self.hand:
+			v.append(str(c.value))
+		return ','.join(v)
 
-class Robot(Player):
-	def __init__(self,n):
+class Human(Player,Gambler):
+	def __init__(self,n,m):
 		Player.__init__(self,n)
+		Gambler.__init__(self,m)
+
+class Robot(Player,Gambler):
+	def __init__(self,n,m):
+		Player.__init__(self,n)
+		Gambler.__init__(self,m)
 
 	def more_cards(self):
+		self.place_bet(1)
 		if self.sum_hand() < 15:
 			return True
 		else:
@@ -50,23 +74,28 @@ class Robot(Player):
 class House(Player):
 	def __init__(self,n):
 		Player.__init__(self,n)
+
 	def more_cards(self):
 		if self.sum_hand() < 16:
 			return True
 		else:
 			return False
 
-class Smart(Player):
-	def __init__(self,n):
+class Smart(Player,Gambler):
+	def __init__(self,n,m):
 		Player.__init__(self,n)
+		Gambler.__init__(self,m)
 
 	def more_cards(self):
 		card = self.house_card.value
-	#	print "value %d cards in hand %d" % (card,self.cards_in_hand())
+		self.place_bet(1)
 		if ((card == 5) or (card == 6)) and self.sum_hand() > 11:
 			return False
 
-		if self.sum_hand() < 15:
+		if self.sum_hand() >= 13 and self.sum_hand() <= 16 and card >= 2 and card <=6:
+			return False
+
+		if self.sum_hand() < 14:
 			return True
 		else:
 			return False

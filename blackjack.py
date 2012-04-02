@@ -4,6 +4,7 @@ from cards import Deck
 from player import Robot
 from player import House
 from player import Smart
+from player import Genious
 from statistic import Stats
 
 import time
@@ -20,6 +21,7 @@ class Blackjack:
 	def throw_all_hands(self):
 		for a in self.players:
 			a.throw_hand()
+			a.clear_bet()
 		self.house.throw_hand()
 
 	def add_player(self,p):
@@ -30,7 +32,6 @@ class Blackjack:
 
 	def play(self):
 		print "*** Game started ***"
-		#time.sleep(5)
 		self.play_round()
 		print "cards left %d" %	(self.deck.cards_left())
 		print "*** Game End ***"
@@ -44,9 +45,16 @@ class Blackjack:
 		return self.deck.pop_card()
 
 	def start_deal(self):
+		#Has all player money left
+		for a in self.players:
+			if a.money <= 0:
+				print "%s lost all money" % (a.name)
+				exit(1)
+
 		#Players gets their first cards
 		for a in self.players:
 			c = self.pop_card()
+			a.place_bet(1)
 			a.take_card(c)
 
 		#House gets it's first card
@@ -87,6 +95,7 @@ class Blackjack:
 		self.Stat.collect_data(self.house,self.players)
 
 		#Round is over throw the cards holding
+		#and clear all bets.
 		self.throw_all_hands()
 
 	def show_results(self):
@@ -99,13 +108,15 @@ def main():
 	p2 = Robot("Nisse",cash)
 	p3 = Robot("Olle",cash)
 	p4 = Smart("Albert",cash)
+	p5 = Genious("Radovan",cash)
 
-	game.add_player(p1)
+	game.add_player(p5)
 	game.add_player(p2)
 	game.add_player(p3)
 	game.add_player(p4)
+	game.add_player(p1)
 
-	for i in range(0,1):
+	while True:
 		game.play()
 
 	game.show_results()

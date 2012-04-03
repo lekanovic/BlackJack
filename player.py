@@ -81,6 +81,37 @@ class Human(Player,Gambler):
 		Player.__init__(self,n)
 		Gambler.__init__(self,m)
 
+	def handle_user_input(self):
+
+		while True:
+			if self.sum_hand() > 21:
+				print "Busted!! %d=[%s]" % (self.sum_hand(),self.get_hand())
+				return False
+
+			print "Bank hand %d" % self.house_card.value
+			print "Your hand %d=[%s]" % (self.sum_hand(),self.get_hand())
+			data = raw_input("[H]-hit [S]-stand [D]-double [Q]-quit\n")
+			print "%d" % len(data)
+			if len(data) > 1:
+				print "FEL"
+				continue
+
+			if "h" in data:
+				return True
+			elif "s" in data:
+				return False
+			elif "d" in data:
+				self.place_bet(2*self.bet)
+				return True
+			elif "q" in data:
+				exit(1)
+			else:
+				print "Type h or s or d"
+				continue
+
+	def more_cards(self):
+		return self.handle_user_input()
+
 class Robot(Player,Gambler):
 	def __init__(self,n,m):
 		Player.__init__(self,n)

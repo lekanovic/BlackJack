@@ -5,6 +5,8 @@ from player import Robot
 from player import House
 from player import Smart
 from player import Genious
+from player import Human
+
 from statistic import Stats
 
 import time
@@ -109,12 +111,14 @@ def main():
 	p3 = Robot("Olle",cash)
 	p4 = Smart("Albert",cash)
 	p5 = Genious("Radovan",cash)
+	p6 = Human("Sulka",cash)
 
 	game.add_player(p5)
 	game.add_player(p2)
 	game.add_player(p3)
 	game.add_player(p4)
 	game.add_player(p1)
+	game.add_player(p6)
 
 	while True:
 		game.play()

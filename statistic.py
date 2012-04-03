@@ -28,7 +28,6 @@ class Stats:
 
 		print "House %s has %d=[%s]" % (house.name,s,house.get_hand())
 		for a in players:
-			#if a.sum_hand() <= s and s < 22 or a.sum_hand() > 21:
 			if a.sum_hand() <= s:
 				a.lost(a.bet)
 				self.print_data(a,"lost")

@@ -22,22 +22,22 @@ class Stats:
 					self.pay_player(a)
 					self.print_data(a,"won");
 				else:
-					self.print_data(a,"lost-tjock")
 					a.lost(a.bet)
+					self.print_data(a,"lost-bust")
 			return
 
 		print "House %s has %d=[%s]" % (house.name,s,house.get_hand())
 		for a in players:
-			if a.sum_hand() <= s and s < 22 or a.sum_hand() > 21:
-				if a.sum_hand() > 21:
-					self.print_data(a,"lost-tjock")
-					a.lost(a.bet)
-				else:
-					self.print_data(a,"lost")
-					a.lost(a.bet)
-			else:
+			#if a.sum_hand() <= s and s < 22 or a.sum_hand() > 21:
+			if a.sum_hand() <= s:
+				a.lost(a.bet)
+				self.print_data(a,"lost")
+			elif a.sum_hand() < 22:
 				self.pay_player(a)
 				self.print_data(a,"won")
+			else:
+				a.lost(a.bet)
+				self.print_data(a,"lost-bust")
 
 	def print_data(self,a,outcome):
 		if self.has_blackjack(a):

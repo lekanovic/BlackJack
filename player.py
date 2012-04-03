@@ -166,6 +166,9 @@ class Genious(Player,Gambler):
 
 	def try_hard_hand(self):
 		card = self.house_card.value
+		if card == 1:
+			card == 11
+
 		mysum = self.sum_hand_hard()
 		if mysum <= 8:
 			return True
@@ -220,7 +223,7 @@ def main():
 
 	p1.place_bet(1)
 	p1.add_house_card(Card(9,1,1))
-	
+
 	while True:
 		print "bet=%d money=%d hand %d=[%s]" % (p1.bet,p1.money,p1.sum_hand(),p1.get_hand())
 		if p1.more_cards():

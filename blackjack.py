@@ -32,11 +32,11 @@ class Blackjack:
 	def remove_player(self,p):
 		[a for a in self.players if a.name == p]
 
-	def play(self):
+	def play(self,silent=False):
 		print "*** Game started ***"
-		self.play_round()
+		self.play_round(silent)
 		print "cards left %d" %	(self.deck.cards_left())
-		print "*** Game End ***"
+		print "*** Game End ***\n"
 
 	def pop_card(self):
 		#All cards are used create an new deck of cards
@@ -46,7 +46,7 @@ class Blackjack:
 
 		return self.deck.pop_card()
 
-	def start_deal(self):
+	def start_deal(self,silent):
 		#Has all player money left
 		for a in self.players:
 			if a.money <= 0:
@@ -58,10 +58,14 @@ class Blackjack:
 			c = self.pop_card()
 			a.place_bet(1)
 			a.take_card(c)
+			if not silent:
+				print "%s hand %d=[%s]" % (a.name,a.sum_hand(),a.get_hand())
 
 		#House gets it's first card
 		c = self.pop_card()
 		self.house.take_card(c)
+		if not silent:
+			print "House hand %d" % (c.value)
 
 		#Let players know what card house got
 		for a in self.players:
@@ -71,6 +75,8 @@ class Blackjack:
 		for a in self.players:
 			c = self.pop_card()
 			a.take_card(c)
+			if not silent:
+				print "%s hand %d=[%s]" % (a.name,a.sum_hand(),a.get_hand())
 
 		#House gets it's second card but is not
 		#showed to players.
@@ -78,9 +84,9 @@ class Blackjack:
 		self.house.take_card(c)
 
 
-	def play_round(self):
+	def play_round(self,silent):
 
-		self.start_deal()
+		self.start_deal(silent)
 
 		#Now players can decide if they should
 		#have more cards or stop
@@ -88,6 +94,8 @@ class Blackjack:
 			while a.more_cards():
 				c = self.pop_card()
 				a.take_card(c)
+				if not silent:
+					print "%s hand %d=[%s]" % (a.name,a.sum_hand(),a.get_hand())
 
 		#House turn to pick cards
 		while self.house.more_cards():
@@ -111,17 +119,17 @@ def main():
 	p3 = Robot("Olle",cash)
 	p4 = Smart("Albert",cash)
 	p5 = Genious("Radovan",cash)
-	p6 = Human("Sulka",cash)
+	#p6 = Human("Sulka",cash)
 
+	#game.add_player(p6)
 	game.add_player(p5)
 	game.add_player(p2)
 	game.add_player(p3)
 	game.add_player(p4)
 	game.add_player(p1)
-	game.add_player(p6)
 
 	while True:
-		game.play()
+		game.play(silent=True)
 
 	game.show_results()
 

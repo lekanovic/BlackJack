@@ -235,7 +235,6 @@ class Genious(Player,Gambler):
 	def more_cards(self):
 		soft = self.sum_hand_soft()
 		hard = self.sum_hand_hard()
-		print "soft %d hard %d " % (soft,hard)
 		if soft == hard:
 			return self.try_hard_hand()
 		else:

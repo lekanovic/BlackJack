@@ -35,9 +35,11 @@ class Blackjack:
 
 	def play(self,silent=False):
 		print "*** Game started ***"
-		self.play_round(silent)
+		all_players_lost = self.play_round(silent)
 		print "cards left %d" %	(self.deck.cards_left())
 		print "*** Game End ***\n"
+
+		return all_players_lost
 
 	def pop_card(self):
 		#All cards are used create an new deck of cards
@@ -57,7 +59,7 @@ class Blackjack:
 		#Check if all players busted
 		if (len(self.players) == 0):
 			print "Bank has won!"
-			exit(-1)
+			return True
 
 		#Players gets their first cards
 		for a in self.players:
@@ -82,10 +84,11 @@ class Blackjack:
 		c = self.pop_card()
 		self.house.take_card(c)
 
+		return False
 
 	def play_round(self,silent):
 
-		self.start_deal(silent)
+		all_players_lost = self.start_deal(silent)
 
 		#Now players can decide if they should
 		#have more cards or stop
@@ -107,10 +110,13 @@ class Blackjack:
 		#and clear all bets.
 		self.throw_all_hands()
 
+		return all_players_lost
+
 	def show_results(self):
 		print "not implemented yet"
 
 def main():
+	rounds_played = 0
 	cash = 100
 	game = Blackjack(House('Jimmy'))
 	p1 = Robot("Calle",cash)
@@ -128,8 +134,10 @@ def main():
 	game.add_player(p1)
 
 	while True:
-		game.play(silent=True)
-
+		rounds_played += 1
+		if (game.play(silent=True)):
+			break
+	print "Rounds played %d" % rounds_played
 	game.show_results()
 
 if __name__ == "__main__":

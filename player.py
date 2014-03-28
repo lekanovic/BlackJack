@@ -124,8 +124,9 @@ class Robot(Player,Gambler):
 			return False
 
 class House(Player):
-	def __init__(self,n):
+	def __init__(self,n,m=10000):
 		Player.__init__(self,n)
+		self.money = m
 
 	def more_cards(self):
 		hand = self.sum_hand()
@@ -135,6 +136,12 @@ class House(Player):
 			return False
 		else:
 			return False
+	def won(self,m):
+		self.money += m
+
+	def lost(self,m):
+		self.money -= m
+
 
 class Smart(Player,Gambler):
 	def __init__(self,n,m):

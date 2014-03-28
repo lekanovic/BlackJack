@@ -34,6 +34,11 @@ class Blackjack:
 		[a for a in self.players if a.name == p]
 
 	def play(self,silent=False):
+		#Check if house is bankrupt
+		if (self.house.money <= 0):
+			print "House is bankrupt"
+			return True
+
 		print "*** Game started ***"
 		all_players_lost = self.play_round(silent)
 		print "cards left %d" %	(self.deck.cards_left())
@@ -58,7 +63,7 @@ class Blackjack:
 
 		#Check if all players busted
 		if (len(self.players) == 0):
-			print "Bank has won!"
+			print "House has won!"
 			return True
 
 		#Players gets their first cards
@@ -118,7 +123,7 @@ class Blackjack:
 def main():
 	rounds_played = 0
 	cash = 100
-	game = Blackjack(House('Jimmy'))
+	game = Blackjack(House('Jimmy',1000))
 	p1 = Robot("Calle",cash)
 	p2 = Robot("Nisse",cash)
 	p3 = Robot("Olle",cash)

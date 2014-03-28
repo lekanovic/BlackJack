@@ -12,12 +12,13 @@ from statistic import Stats
 import time
 
 class Blackjack:
-	def __init__(self,h,n=5):
+	def __init__(self,h,n=5,b=1):
 		self.Stat = Stats()
 		self.number_of_decks = n
 		self.house = h
 		self.players = []
 		self.deck = Deck(self.number_of_decks)
+		self.minimum_bet = b
 		self.deck.shuffle()
 
 	def throw_all_hands(self):
@@ -51,12 +52,17 @@ class Blackjack:
 		for a in self.players:
 			if a.money <= 0:
 				print "%s lost all money" % (a.name)
-				exit(1)
+				self.players.remove(a)
+
+		#Check if all players busted
+		if (len(self.players) == 0):
+			print "Bank has won!"
+			exit(-1)
 
 		#Players gets their first cards
 		for a in self.players:
 			c = self.pop_card()
-			a.place_bet(1)
+			a.place_bet(self.minimum_bet)
 			a.take_card(c)
 			if not silent:
 				print "%s hand %d=[%s]" % (a.name,a.sum_hand(),a.get_hand())
@@ -70,13 +76,6 @@ class Blackjack:
 		#Let players know what card house got
 		for a in self.players:
 			a.add_house_card(c)
-
-		#Players gets their second cards
-		for a in self.players:
-			c = self.pop_card()
-			a.take_card(c)
-			if not silent:
-				print "%s hand %d=[%s]" % (a.name,a.sum_hand(),a.get_hand())
 
 		#House gets it's second card but is not
 		#showed to players.

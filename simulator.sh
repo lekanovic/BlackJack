@@ -14,10 +14,11 @@ times_lost_nisse=0
 most_money=0
 
 printf "\r\n"
+rounds_played=0
 
 while [ 1 ]
 do
-
+	((rounds_played++))
 	python blackjack.py > log
 
 	who_lost=$(cat log|grep "lost all money"|tail -1)
@@ -34,7 +35,7 @@ do
 	fi
 
 	money=$(cat log|egrep "hand|hand BlackJack"|awk 'NF ''{print $(NF-2)}'|sed -e 's/\$//g'|uniq |sort -n|tail -1)
-	
+
 	if [ $money -gt $most_money ]; then
 		most_money=$money
 		printf " Most money $%d %s\n" $most_money $(cat log|grep "\$$most_money"|tail -1|awk '{print $1}') >> most_money
@@ -44,7 +45,8 @@ do
 	printf " Radovan lost %d " $times_lost_radovan
 	printf " Olle lost %d " $times_lost_olle
 	printf " Albert lost %d " $times_lost_albert
-	printf " Calle lost %d \r" $times_lost_calle
+	printf " Calle lost %d " $times_lost_calle
+	printf " Rounds played %d \r" $rounds_played
 
 	if [ $(cat gofile) == 0 ]; then
 		printf "\r\n"
